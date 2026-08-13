@@ -1,0 +1,18 @@
+# Legacy algorithm sources are GBK/CRLF. Preserve their bytes while keeping
+# textual diffs available; new orchestration files use normal UTF-8 text rules.
+CoordinateTransformation.cpp -text diff whitespace=cr-at-eol
+CoordinateTransformation.h -text diff whitespace=cr-at-eol
+Decode.cpp -text diff whitespace=cr-at-eol
+Decode.h -text diff whitespace=cr-at-eol
+ErrorCorrection.cpp -text diff whitespace=cr-at-eol
+ErrorCorrection.h -text diff whitespace=cr-at-eol
+KF.cpp -text diff whitespace=cr-at-eol
+lambda.cpp -text diff whitespace=cr-at-eol
+Position.cpp -text diff whitespace=cr-at-eol
+Position.h -text diff whitespace=cr-at-eol
+RTK.cpp -text diff whitespace=cr-at-eol
+RTK.h -text diff whitespace=cr-at-eol
+SPP_SPV.cpp -text diff whitespace=cr-at-eol
+SPP_SPV.h -text diff whitespace=cr-at-eol
+TimeConversion.cpp -text diff whitespace=cr-at-eol
+TimeConversion.h -text diff whitespace=cr-at-eol

@@ -22,9 +22,6 @@ using namespace std;
 
 #define MINELEV    0*3.1415926535/180                       //最小高度角阈值
 
-#define FILEMODE 1//1：文件模式 2：实时模式
-#define positioning 1//定位模式参数，0代表SPP；1代表RTK
-
 /*导航卫星系统定义*/
 enum GNSSSys {UNKS=0,GPS,BDS,GLONASS,GALILEO,QZSS};
 
@@ -177,7 +174,14 @@ struct OEM7_msg_header
 };
 int read(const char* filename, const char* out_file = "");//读取二进制文件，并输出到一个文件中
 //NovAtel OEM7数据解码函数
-int DecodeNovOem7Dat(unsigned char buff[], int& Len, EPOCHOBSDATA* obs, GPSEPHREC geph[], GPSEPHREC beph[],POSRES* pos);
+int DecodeNovOem7Dat(
+	unsigned char buff[],
+	int& Len,
+	EPOCHOBSDATA* obs,
+	GPSEPHREC geph[],
+	GPSEPHREC beph[],
+	POSRES* pos,
+	bool stopAfterObservation = true);
 int decode_rangeb_oem7(unsigned char* buff, EPOCHOBSDATA* obs);
 void decode_gpsephem(unsigned char* buff, GPSEPHREC geph[]);
 void decode_bdsephem(unsigned char* buff, GPSEPHREC beph[]);

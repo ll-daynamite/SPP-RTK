@@ -14,9 +14,14 @@ bool OpenSocket(SOCKET& sock, const char IP[], const unsigned short Port)
 			addrSrv.sin_addr.S_un.S_addr = inet_addr(IP);
 			addrSrv.sin_family = AF_INET;
 			addrSrv.sin_port = htons(Port);
-			connect(sock, (SOCKADDR*)&addrSrv, sizeof(SOCKADDR));	
-			return true;
+			if (connect(sock, (SOCKADDR*)&addrSrv, sizeof(SOCKADDR)) != SOCKET_ERROR)
+			{
+				return true;
+			}
+			closesocket(sock);
+			sock = INVALID_SOCKET;
 		}
+		WSACleanup();
 	}
 	return false;
 }
@@ -24,5 +29,6 @@ bool OpenSocket(SOCKET& sock, const char IP[], const unsigned short Port)
 void CloseSocket(SOCKET& sock)
 {
 	closesocket(sock);
+	sock = INVALID_SOCKET;
 	WSACleanup();
 }

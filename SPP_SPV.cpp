@@ -46,7 +46,12 @@ void ComputeSatPVTAtSignalTrans( EPOCHOBSDATA*
 
 }
 
-bool SPP(EPOCHOBSDATA* Epoch, GPSEPHREC* GPSEph, GPSEPHREC* BDSEph, POSRES* Res)//单点定位
+bool SPP(
+	EPOCHOBSDATA* Epoch,
+	GPSEPHREC* GPSEph,
+	GPSEPHREC* BDSEph,
+	POSRES* Res,
+	bool writeObservationLog)//单点定位
 {
 	MatrixXd X0(5, 1), X(5, 1),W,N,v,P;
 	VectorXd sateaiz(2);
@@ -198,7 +203,7 @@ bool SPP(EPOCHOBSDATA* Epoch, GPSEPHREC* GPSEph, GPSEPHREC* BDSEph, POSRES* Res)
 	//cout<< Res->Time.week << " " << Res->Time.secofweek<<" "<<endl;
 	//cout << "GPS钟差：" << Res->GPS_clk << " " << "BDS钟差：" << Res->BDS_clk << " " << "有效卫星数：" << Res->validcount << endl;
 	//cout<< "X:" << Res->Pos[0] << " " << " Y:" << Res->Pos[1] << " " << "Z:" << Res->Pos[2] << " " << "sigamaPos: " << Res->SigmaPos << " " << "PDOP:" << Res->PDOP << endl;
-	if (FILEMODE == 1)
+	if (writeObservationLog)
 	{
 		ofstream outfile1("OBS.txt",ios::app);
 		outfile1 << fixed << setprecision(3);

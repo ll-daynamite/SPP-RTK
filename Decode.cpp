@@ -63,7 +63,14 @@ void decode_psrpos(unsigned char* buff, POSRES* pos)
 
 
 /*解码OEM7格式数据，返回是否解码成功*/
-int DecodeNovOem7Dat(unsigned char buff[], int& len, EPOCHOBSDATA* obs, GPSEPHREC geph[], GPSEPHREC beph[],POSRES*pos)
+int DecodeNovOem7Dat(
+	unsigned char buff[],
+	int& len,
+	EPOCHOBSDATA* obs,
+	GPSEPHREC geph[],
+	GPSEPHREC beph[],
+	POSRES* pos,
+	bool stopAfterObservation)
 {
 	int i = 0;
 	int flag=0;
@@ -118,7 +125,7 @@ int DecodeNovOem7Dat(unsigned char buff[], int& len, EPOCHOBSDATA* obs, GPSEPHRE
 				break;
 			}
 			i = i + 28 + head.message_len + 4;
-			if (flag == 1&&FILEMODE==1&&status==1) break;
+			if (flag == 1 && stopAfterObservation && status == 1) break;
 		}
 		else 
 		{

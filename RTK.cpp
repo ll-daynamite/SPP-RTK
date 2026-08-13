@@ -68,7 +68,7 @@ int RTKTimeSyn_socket(SOCKET rover_sock, SOCKET base_sock, rtkdata& rtkdata, FIL
     Rremaining += lenR;
 
     // 解流动站数据
-    if (DecodeNovOem7Dat(rover_buff, Rremaining, &rtkdata.rover_obs, rtkdata.geph, rtkdata.beph, &rtkdata.roverpos) != 1)
+    if (DecodeNovOem7Dat(rover_buff, Rremaining, &rtkdata.rover_obs, rtkdata.geph, rtkdata.beph, &rtkdata.roverpos, false) != 1)
         return 0;  // 尚未解出完整历元
 
     // 计算时间差
@@ -91,7 +91,7 @@ int RTKTimeSyn_socket(SOCKET rover_sock, SOCKET base_sock, rtkdata& rtkdata, FIL
         Bremaining += lenB;
     }
 
-    if (DecodeNovOem7Dat(base_buff, Bremaining, &rtkdata.base_obs, rtkdata.geph, rtkdata.beph, &rtkdata.basepos) == 1)
+    if (DecodeNovOem7Dat(base_buff, Bremaining, &rtkdata.base_obs, rtkdata.geph, rtkdata.beph, &rtkdata.basepos, false) == 1)
     {
         time_diff = rtkdata.rover_obs.Time.secofweek - rtkdata.base_obs.Time.secofweek +
             (rtkdata.rover_obs.Time.week - rtkdata.base_obs.Time.week) * 604800;
@@ -115,7 +115,7 @@ int TimeSynch(FILE* roverfile, FILE* basefile, rtkdata*data)//时间同步函数
     {
         if ((lenr_rover = fread(buff_rover + lenD_rover, sizeof(unsigned char), MAXRAWLEN - lenD_rover, roverfile)) < MAXRAWLEN - lenD_rover)return -1;
         lenD_rover += lenr_rover;
-        if (DecodeNovOem7Dat(buff_rover, lenD_rover, &data->rover_obs, data->geph, data->beph, &data->roverpos) == 1)break;
+        if (DecodeNovOem7Dat(buff_rover, lenD_rover, &data->rover_obs, data->geph, data->beph, &data->roverpos, true) == 1)break;
     }
     //比较流动站观测时刻和当前基站观测时刻
     dt = (data->rover_obs.Time.week - data->base_obs.Time.week) * 604800 + data->rover_obs.Time.secofweek - data->base_obs.Time.secofweek;
@@ -125,7 +125,7 @@ int TimeSynch(FILE* roverfile, FILE* basefile, rtkdata*data)//时间同步函数
     {
         if ((lenr_base = fread(buff_base + lenD_base, sizeof(unsigned char), MAXRAWLEN - lenD_base, basefile)) < MAXRAWLEN - lenD_base)return -1;
         lenD_base += lenr_base;
-        if (DecodeNovOem7Dat(buff_base, lenD_base, &data->base_obs, data->geph, data->beph, &data->basepos) == 1)
+        if (DecodeNovOem7Dat(buff_base, lenD_base, &data->base_obs, data->geph, data->beph, &data->basepos, true) == 1)
         {
             dt = (data->rover_obs.Time.week - data->base_obs.Time.week) * 604800 + data->rover_obs.Time.secofweek - data->base_obs.Time.secofweek;
             if (fabs(dt) <0.5)return 1;
@@ -133,6 +133,7 @@ int TimeSynch(FILE* roverfile, FILE* basefile, rtkdata*data)//时间同步函数
             else;
         }
     }
+    return -1;
 }
 void Detect_abnormal( EPOCHOBSDATA* Epk)
 {
