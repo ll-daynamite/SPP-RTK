@@ -121,27 +121,6 @@ build/Release/SPP-RTK.exe
 
 运行输出和原始接收机数据已加入 `.gitignore`，避免误提交大文件。输入数据不包含在仓库中。
 
-## 推荐的 Git 工作流
-
-每次开发一个独立功能时创建分支：
-
-```powershell
-git switch main
-git pull
-git switch -c feature/功能名称
-```
-
-修改后先检查差异并提交：
-
-```powershell
-git status
-git diff
-git add .
-git commit -m "说明本次修改"
-git push -u origin feature/功能名称
-```
-
-确认无误后在 GitHub 创建 Pull Request，合并到 `main`。不要提交原始观测数据、生成的 CSV、编译目录或账号密钥。
 
 ## 注意事项
 
